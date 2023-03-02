@@ -12,7 +12,7 @@ const Cart = () => {
     const totalCount = items.reduce((sum, item) => sum + item.count, 0);
 
     const onClickClear = () => {
-        if (window.confirm('Ты действительно хочешь удалить товар?')) {
+        if (window.confirm('Ты действительно хочешь очистить корзину?')) {
             dispatch(clearItems())
         }
     }
