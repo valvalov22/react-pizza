@@ -1,19 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { SearchContext } from '../App';
+import React, {  useRef } from 'react';
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
-import Sort from '../components/Sort';
+import Sort, { list } from '../components/Sort';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCategoryId, setCurrentPage } from '../redux/slices/filterSlice';
+import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
 import { fetchPizzas } from '../redux/slices/pizzaSlice';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const isSearch = useRef(false);
+    const isMounted = useRef(false);
 
     const { categoryId, sort, currentPage, searchValue } = useSelector((state) => state.filter);
     const { status, items } = useSelector((state) => state.pizza);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const onChangePage = (number) => {
@@ -36,6 +39,20 @@ const Home = () => {
 
       window.scrollTo(0, 0);
     };
+
+    // React.useEffect(() => {
+    //   if (window.location.search) {
+    //     const params = qs.parse(window.location.search.substring(1));
+
+    //     const sort = list.find(obj => obj.sort === params.sort)
+
+    //     dispatch(setFilters({
+    //       ...params,
+    //       sort
+    //     }))
+    //   }
+    //   isSearch.current = true;
+    // }, [])
   
     // Если был первый рендер, то запрашиваем пиццы
     React.useEffect(() => {
@@ -48,8 +65,21 @@ const Home = () => {
       isSearch.current = false;
     }, [categoryId, sort.sort, searchValue, currentPage]);
 
+    // React.useEffect(() => {
+    //   if (isMounted.current) {
+    //     const queryString = qs.stringify({
+    //       sort: sort.sort,
+    //       categoryId,
+    //       currentPage
+    //     });
+    //     navigate(`?${queryString}`);
+    //   }
 
-  const pizzas = items.map(pizza => <PizzaBlock {...pizza} key={pizza.id} />);
+    //   isMounted.current = true;
+    // }, [categoryId, sort.sort, currentPage])
+
+
+  const pizzas = items.map(pizza => <PizzaBlock key={pizza.id} {...pizza} />);
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
   const onChangeCategory = (index) => {
     dispatch(setCategoryId(index))
