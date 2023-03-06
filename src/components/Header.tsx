@@ -9,7 +9,7 @@ const Header = () => {
   const {items, totalPrice} = useSelector(selectCart);
   const location = useLocation();
 
-  const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+  const totalCount = items.reduce((sum: number, item: any) => sum + item.count, 0);
 
   return (
     <div className="header">
@@ -27,7 +27,7 @@ const Header = () => {
       <Link to="/cart">
         <div className="header__cart">
         {location.pathname !== '/cart' && (
-          <div href="/cart.html" className="button button--cart">
+          <Link to="/cart" className="button button--cart">
             <span>{totalPrice} ₽</span>
             <div className="button__delimiter"></div>
             <svg
@@ -60,7 +60,7 @@ const Header = () => {
               />
             </svg>
             <span>{totalCount}</span>
-        </div>)}
+        </Link>)}
         </div>
       </Link>
     </div>

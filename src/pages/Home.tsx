@@ -5,22 +5,22 @@ import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Sort, { list } from '../components/Sort';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
-import { fetchPizzas } from '../redux/slices/pizzaSlice';
+import { selectFilter, setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
+import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
+const Home: React.FC = () => {
     const isSearch = useRef(false);
     const isMounted = useRef(false);
 
-    const { categoryId, sort, currentPage, searchValue } = useSelector((state) => state.filter);
-    const { status, items } = useSelector((state) => state.pizza);
+    const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
+    const { status, items } = useSelector(selectPizzaData);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const onChangePage = (number) => {
-      dispatch(setCurrentPage(number));
+    const onChangePage = (page: number) => {
+      dispatch(setCurrentPage(page));
     }
 
     const getPizzas = async () => {
@@ -29,7 +29,9 @@ const Home = () => {
       const category = categoryId > 0 ? `category=${categoryId}` : '';
       const search = searchValue ? `search=${searchValue}` : '';
 
-      dispatch(fetchPizzas({
+      dispatch(
+        // @ts-ignore
+        fetchPizzas({
         sortBy,
         order,
         category,
@@ -79,16 +81,16 @@ const Home = () => {
     // }, [categoryId, sort.sort, currentPage])
 
 
-  const pizzas = items.map(pizza => <PizzaBlock key={pizza.id} {...pizza} />);
+  const pizzas = items.map((pizza: any) => <PizzaBlock key={pizza.id} {...pizza} />);
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
-  const onChangeCategory = (index) => {
+  const onChangeCategory = (index: number) => {
     dispatch(setCategoryId(index))
   }
 
   return (
     <div className="container">
         <div className="content__top">
-        <Categories value={categoryId} onClickCategory={(index) => onChangeCategory(index)} />
+        <Categories value={categoryId} onClickCategory={(index: number) => onChangeCategory(index)} />
         <Sort />
         </div>
         <h2 className="content__title">Все пиццы</h2>

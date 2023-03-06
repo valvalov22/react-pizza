@@ -2,7 +2,7 @@ import React from 'react';
 
 import classes from './NotFoundBlock.module.scss';
 
-const index = () => {
+const NotFoundBlock = () => {
   return (
     <div className={classes.root}>
         <h1>
@@ -15,4 +15,4 @@ const index = () => {
   )
 }
 
-export default index
+export default NotFoundBlock
