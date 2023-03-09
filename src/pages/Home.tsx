@@ -5,9 +5,11 @@ import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Sort from '../components/Sort';
 import { useSelector } from 'react-redux';
-import { selectFilter, setCategoryId, setCurrentPage } from '../redux/slices/filterSlice';
-import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { useAppDispatch } from '../redux/store';
+import { selectFilter } from '../redux/slices/filter/selectors';
+import { setCategoryId, setCurrentPage } from '../redux/slices/filter/slice';
+import { selectPizzaData } from '../redux/slices/pizza/selectors';
+import { fetchPizzas } from '../redux/slices/pizza/asyncActions';
 
 const Home: React.FC = () => {
     const isSearch = useRef(false);
@@ -52,15 +54,15 @@ const Home: React.FC = () => {
 
   const pizzas = items.map((pizza: any) => <PizzaBlock key={pizza.id} {...pizza} />);
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
-  const onChangeCategory = (index: number) => {
+  const onChangeCategory = React.useCallback((index: number) => {
     dispatch(setCategoryId(index))
-  }
+  }, [])
 
   return (
     <div className="container">
         <div className="content__top">
         <Categories value={categoryId} onClickCategory={(index: number) => onChangeCategory(index)} />
-        <Sort />
+        <Sort value={sort} />
         </div>
         <h2 className="content__title">Все пиццы</h2>
         {
