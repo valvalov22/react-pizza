@@ -43,4 +43,4 @@ and run the project by
 
 ## Empty cart
 
-![emptyCart](https://github.com/valvalov22/react-pizza/blob/main/EmptyCart.png ""emptyCart)
+![emptyCart](https://github.com/valvalov22/react-pizza/blob/main/EmptyCart.png "emptyCart")
